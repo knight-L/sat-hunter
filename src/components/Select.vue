@@ -87,7 +87,6 @@ const emits = defineEmits(["update:modelValue"]);
 
 const isOpen = ref(false);
 const inputRef = ref<HTMLInputElement | null>(null);
-const containerRef = ref<HTMLDivElement | null>(null);
 const dropdownRef = ref<HTMLDivElement | null>(null);
 
 const searchQuery = ref("");
