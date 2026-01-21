@@ -45,13 +45,13 @@
 
       <div class="flex-1 p-5 flex flex-col gap-6">
         <div
-          class="text-xs font-bold text-center py-2 px-3 rounded-md border transition-colors duration-300"
+          class="text-xs h-8 font-bold text-center py-2 px-3 rounded-md border transition-colors duration-300"
           :class="[
             currentMode === 'polygon'
               ? 'bg-green-50 text-green-700 border-green-200'
               : currentMode === 'rect'
-              ? 'bg-gray-100 text-gray-600 border-gray-200'
-              : 'bg-yellow-50 text-yellow-600 border-yellow-100',
+                ? 'bg-gray-100 text-gray-600 border-gray-200'
+                : 'bg-yellow-50 text-yellow-600 border-yellow-100',
           ]">
           {{ modeText }}
         </div>
@@ -68,44 +68,6 @@
             :options="allRegions"
             @update:modelValue="selectRegion"
             placeholder="选择或输入区域关键字" />
-          <!-- <div class="flex gap-2">
-            <input
-              type="text"
-              v-model="searchQuery"
-              placeholder="输入区域名称或关键字"
-              class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400"
-              @keypress.enter="searchLocation" />
-            <button
-              class="px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              @click="searchLocation"
-              :disabled="isSearching">
-              {{ isSearching ? "..." : "🔍" }}
-            </button>
-          </div>
-          <div v-if="isRegionLoading" class="text-xs text-gray-400 mt-2">
-            区域数据加载中...
-          </div>
-          <div v-else-if="regionLoadError" class="text-xs text-red-500 mt-2">
-            {{ regionLoadError }}
-          </div>
-          <div
-            v-else-if="filteredRegions.length"
-            class="mt-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg bg-white shadow-sm text-xs">
-            <button
-              v-for="item in filteredRegions"
-              :key="item.adcode"
-              class="w-full px-3 py-1.5 text-left hover:bg-blue-50 flex justify-between items-center">
-              <span class="truncate" @click="selectRegion(item)">
-                {{ item.name }}
-              </span>
-              <span class="ml-2 text-[10px] text-gray-400 uppercase">
-                {{ item.level }}
-              </span>
-            </button>
-          </div>
-          <div v-if="searchError" class="text-xs text-red-500 mt-2">
-            {{ searchError }}
-          </div> -->
         </div>
 
         <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
@@ -190,7 +152,7 @@
         </div>
       </div>
 
-      <div class="p-5 border-t border-gray-100 bg-gray-50 mt-auto">
+      <div class="p-5 mt-auto">
         <button
           class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-200 disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed transition-all transform active:scale-[0.98]"
           :disabled="!currentMode || isDownloading"
@@ -211,7 +173,6 @@
         </div>
       </div>
     </aside>
-    <Test />
 
     <div
       id="map"
@@ -284,7 +245,7 @@
   const baseMapLayer = shallowRef<L.TileLayer | null>(null);
   const labelLayer = shallowRef<L.TileLayer | null>(null);
 
-  const searchQuery = ref("");
+  const searchQuery = ref<number>();
   const allRegions = ref<RegionItem[]>([]);
   const isRegionLoading = ref(false);
   const regionLoadError = ref("");
@@ -303,103 +264,48 @@
       id: "gaode_vector",
       name: "高德卫星",
       url: "https://webst01.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
     {
       id: "esri_light_gray",
       name: "浅色灰底图",
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
     {
       id: "esri_dark_gray",
       name: "暗色灰底图",
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
     {
       id: "esri_imagery",
       name: "ESRI 卫星影像",
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
     {
       id: "esri_hill_shade",
       name: "地形图",
       url: "https://server.arcgisonline.com/arcgis/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
     {
       id: "esri_imagery_firefly",
       name: "萤火虫影像混合图",
       url: "https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
     {
       id: "google_satellite",
       name: "Google 卫星",
       url: "http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}",
-      // labelUrl:
-      //     "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      // labelOptions: {
-      //     subdomains: "abcd",
-      //     maxZoom: 19,
-      // },
     },
   ];
+
+  const selectedData = computed(() =>
+    allRegions.value.find((op) => op.adcode === searchQuery.value),
+  );
 
   const modeText = computed(() => {
     if (currentMode.value === "rect") return "当前模式: 矩形框选";
     if (currentMode.value === "polygon")
-      return `当前模式: 区域轮廓 (${searchQuery.value})`;
+      return `当前模式: 区域轮廓 (${selectedData.value?.name})`;
     return "当前模式: 等待操作";
-  });
-
-  const filteredRegions = computed(() => {
-    const q = searchQuery.value.trim().toLowerCase();
-    const list = allRegions.value;
-    if (!q) {
-      return list.slice(0, 50);
-    }
-    return list
-      .filter((item) => {
-        const nameMatch = item.name.toLowerCase().includes(q);
-        const pinyinText = (item.pinyin || []).join("").toLowerCase();
-        const pinyinMatch = pinyinText.includes(q);
-        const adcodeMatch = String(item.adcode).startsWith(q);
-        return nameMatch || pinyinMatch || adcodeMatch;
-      })
-      .slice(0, 50);
   });
 
   watch(zoomLevel, () => updateEstimate());
@@ -424,15 +330,6 @@
     });
     layer.addTo(map.value);
     baseMapLayer.value = layer;
-
-    // if (config.labelUrl) {
-    //     const label = L.tileLayer(config.labelUrl, {
-    //         crossOrigin: "anonymous",
-    //         ...(config.labelOptions || {}),
-    //     });
-    //     label.addTo(map.value);
-    //     labelLayer.value = label;
-    // }
   };
 
   const loadAddressData = async () => {
@@ -440,7 +337,7 @@
     regionLoadError.value = "";
     try {
       const res = await fetch(
-        "https://geo.datav.aliyun.com/areas_v3/bound/all.json"
+        "https://geo.datav.aliyun.com/areas_v3/bound/all.json",
       );
       if (!res.ok) {
         throw new Error(`Failed to load address data: ${res.status}`);
@@ -470,11 +367,11 @@
     // 1. 创建 Map
     const mapInstance = L.map(mapContainer.value).setView(
       [39.9042, 116.4074],
-      10
+      10,
     );
     map.value = mapInstance;
 
-    // 2. 底图 + 标注
+    // 2. 底图
     setBaseMap(currentBaseMap.value);
 
     mapInstance.pm.addControls({
@@ -553,38 +450,26 @@
     updateEstimate();
   };
 
-  const selectRegion = (adcode: string) => {
+  const selectRegion = (adcode: number) => {
     searchQuery.value = adcode;
     searchError.value = "";
+    const level = { country: 6, province: 10, city: 10, district: 14 }?.[
+      selectedData.value?.level ?? ""
+    ];
+    if (level) {
+      zoomLevel.value = level;
+    }
+
     searchLocation(adcode);
   };
 
-  const searchLocation = async (adcode: string) => {
-    // if (!searchQuery.value) return;
-    // isSearching.value = true;
-    // searchError.value = "";
-
+  const searchLocation = async (adcode: number) => {
     // 搜索时清除之前的框
     clearAllLayers();
 
     statusText.value = "正在获取轮廓...";
 
     try {
-      //   const q = searchQuery.value.trim();
-      //   const regionExactByName = allRegions.value.find((r) => r.name === q);
-      //   const regionExactByCode = allRegions.value.find(
-      //     (r) => String(r.adcode) === q
-      //   );
-      //   const regionCandidate =
-      //     regionExactByName ||
-      //     regionExactByCode ||
-      //     (filteredRegions.value.length ? filteredRegions.value[0] : null);
-
-      //   if (!regionCandidate) {
-      //     searchError.value = "未找到地点";
-      //     return;
-      //   }
-
       const endpoint = `https://geo.datav.aliyun.com/areas_v3/bound/${adcode}.json`;
 
       const res = await fetch(endpoint);
@@ -636,7 +521,7 @@
         cityLayer.value = layer;
         map.value.fitBounds(layer.getBounds());
         setMode("polygon");
-        statusText.value = `已选中: ${adcode}`;
+        statusText.value = `已选中: ${selectedData.value?.name}`;
       }
     } catch (e) {
       searchError.value = "网络请求失败";
@@ -749,7 +634,7 @@
               resolve();
             };
             img.onerror = () => resolve();
-          })
+          }),
         );
       }
     }
@@ -810,7 +695,7 @@
         0,
         0,
         cropW,
-        cropH
+        cropH,
       );
 
       finalCanvas.toBlob((blob) => {
@@ -839,11 +724,11 @@
     const y = Math.floor(
       ((1 -
         Math.log(
-          Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)
+          Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180),
         ) /
           Math.PI) /
         2) *
-        Math.pow(2, zoom)
+        Math.pow(2, zoom),
     );
     return { x, y };
   };
@@ -863,7 +748,7 @@
   const drawGeoJSONPath = (
     ctx: CanvasRenderingContext2D,
     geometry: GeoJSONResult,
-    converter: (lat: number, lng: number) => Point
+    converter: (lat: number, lng: number) => Point,
   ) => {
     if (geometry.type === "Polygon") {
       drawPolygonCoordinates(ctx, geometry.coordinates, converter);
@@ -877,7 +762,7 @@
   const drawPolygonCoordinates = (
     ctx: CanvasRenderingContext2D,
     coordinates: any[],
-    converter: (lat: number, lng: number) => Point
+    converter: (lat: number, lng: number) => Point,
   ) => {
     coordinates.forEach((ring: any[]) => {
       ring.forEach((coord, index) => {

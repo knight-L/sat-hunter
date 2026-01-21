@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch, onMounted, onUnmounted, nextTick } from "vue";
+  import { ref, computed, nextTick } from "vue";
 
   interface Option {
     name: string;
@@ -128,7 +128,7 @@
   const containerRef = ref<HTMLDivElement | null>(null);
   const dropdownRef = ref<HTMLDivElement | null>(null);
 
-  const searchQuery = ref(""); // 搜索关键字
+  const searchQuery = ref("");
   const scrollTop = ref(0); // 滚动条位置
 
   // 获取当前选中的 label
@@ -152,31 +152,31 @@
     if (!searchQuery.value) return props.options;
     const query = searchQuery.value.toLowerCase();
     return props.options.filter((op) =>
-      String(op.name).toLowerCase().includes(query)
+      String(op.name).toLowerCase().includes(query),
     );
   });
 
   // 1. 列表总高度 (撑开滚动条)
   const totalHeight = computed(
-    () => filteredOptions.value.length * props.itemHeight
+    () => filteredOptions.value.length * props.itemHeight,
   );
 
   // 2. 可视区域能显示的条数 (向上取整 + 缓冲区)
   const visibleCount = computed(
-    () => Math.ceil(props.dropdownHeight / props.itemHeight) + 4
+    () => Math.ceil(props.dropdownHeight / props.itemHeight) + 4,
   );
 
   // 3. 计算可视区域的开始索引
   const startIndex = computed(() =>
-    Math.floor(scrollTop.value / props.itemHeight)
+    Math.floor(scrollTop.value / props.itemHeight),
   );
 
   // 4. 计算可视区域的结束索引
   const endIndex = computed(() =>
     Math.min(
       startIndex.value + visibleCount.value,
-      filteredOptions.value.length
-    )
+      filteredOptions.value.length,
+    ),
   );
 
   // 5. 当前实际渲染的数据切片
@@ -225,12 +225,8 @@
   };
 
   const handleBlur = () => {
-    // 使用 setTimeout 稍微延迟，以便处理点击下拉项的事件
-    // 因为 blur 优先于 click 触发
-    setTimeout(() => {
-      isOpen.value = false;
-      searchQuery.value = "";
-    }, 150);
+    isOpen.value = false;
+    searchQuery.value = "";
   };
 </script>
 
