@@ -1,8 +1,24 @@
-# Sat-Hunter (卫星底图下载器)
-
-**Sat-Hunter** 是一个基于 Vue 3 和 Leaflet 的在线卫星瓦片底图下载工具。它允许用户通过选择行政区域或手动绘制矩形范围，下载特定缩放级别（Zoom Level）的地图瓦片，并将其自动拼接成一张完整的图片。
-
-![Project Logo](./public/logo.svg)
+<div align="center">
+  <img src="./public/logo.svg" width="120" alt="Sat-Hunter Logo" />
+  <h1>Sat-Hunter</h1>
+  <p>
+    <b>卫星底图下载器</b>
+    <br/>
+    基于 Vue 3 和 Leaflet 的在线卫星瓦片底图下载工具
+  </p>
+  
+  <p>
+    <a href="./LICENSE">
+      <img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=flat-square" alt="License">
+    </a>
+    <img src="https://img.shields.io/badge/vue-3.x-42b883.svg?style=flat-square" alt="Vue 3">
+    <img src="https://img.shields.io/badge/typescript-%5E5.0-3178C6.svg?style=flat-square" alt="TypeScript">
+    <img src="https://img.shields.io/badge/vite-%5E7.0-646CFF.svg?style=flat-square" alt="Vite">
+    <a href="https://github.com/knight-L/sat-hunter/pulls">
+      <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome">
+    </a>
+  </p>
+</div>
 
 ## ✨ 主要功能
 
