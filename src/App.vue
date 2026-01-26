@@ -1,10 +1,12 @@
 <template>
   <div
-    class="flex h-screen w-screen overflow-hidden font-sans text-gray-700 bg-gray-100">
+    class="flex h-screen w-screen overflow-hidden font-sans text-gray-700 bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
     <aside
-      class="flex flex-col w-96 bg-white shadow-2xl z-1000 overflow-y-auto border-r border-gray-200">
-      <div class="p-5 border-b border-gray-100">
-        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+      class="flex flex-col w-96 bg-white shadow-2xl z-1000 overflow-y-auto border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <div
+        class="p-5 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+        <h2
+          class="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
           <svg
             width="40"
             height="40"
@@ -37,10 +39,14 @@
           </svg>
           卫星底图下载器
           <span
-            class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
+            class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
             Pro
           </span>
         </h2>
+        <label class="switch">
+          <input type="checkbox" :checked="isDark" @change="toggleDark" />
+          <span class="slider"></span>
+        </label>
       </div>
 
       <div class="flex-1 p-5 flex flex-col gap-6">
@@ -48,18 +54,18 @@
           class="text-xs h-8 font-bold text-center py-2 px-3 rounded-md border transition-colors duration-300"
           :class="[
             currentMode === 'polygon'
-              ? 'bg-green-50 text-green-700 border-green-200'
+              ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800'
               : currentMode === 'rect'
-                ? 'bg-gray-100 text-gray-600 border-gray-200'
-                : 'bg-yellow-50 text-yellow-600 border-yellow-100',
+                ? 'bg-gray-100 text-gray-600 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600'
+                : 'bg-yellow-50 text-yellow-600 border-yellow-100 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800',
           ]">
           {{ modeText }}
         </div>
 
         <div
-          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow">
+          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700">
           <div
-            class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2 dark:text-gray-200">
             <span class="text-lg">📍</span>
             按区域轮廓下载
           </div>
@@ -70,38 +76,41 @@
             placeholder="选择或输入区域关键字" />
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <div
+          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 dark:bg-gray-800 dark:border-gray-700">
           <div
-            class="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
+            class="text-sm font-bold text-gray-800 mb-2 flex items-center gap-2 dark:text-gray-200">
             <span class="text-lg">📐</span>
             按矩形框选下载
           </div>
-          <p class="text-xs text-gray-500 leading-relaxed">
+          <p class="text-xs text-gray-500 leading-relaxed dark:text-gray-400">
             点击地图左侧工具栏的
-            <strong class="text-gray-900 bg-gray-200 px-1 rounded">
+            <strong
+              class="text-gray-900 bg-gray-200 px-1 rounded dark:text-gray-100 dark:bg-gray-700">
               ⬛ 矩形
             </strong>
             图标画框。
             <br />
-            <span class="text-blue-500">
+            <span class="text-blue-500 dark:text-blue-400">
               提示：画完后可以拖动角点微调范围。
             </span>
           </p>
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+        <div
+          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 dark:bg-gray-800 dark:border-gray-700">
           <div
-            class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+            class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2 dark:text-gray-200">
             <span class="text-lg">⚙️</span>
             设置
           </div>
 
           <div class="mb-2 flex justify-between items-center">
-            <label class="text-xs font-medium text-gray-600">
+            <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
               缩放级别 (Zoom)
             </label>
             <span
-              class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+              class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded dark:bg-blue-900/50 dark:text-blue-400">
               {{ zoomLevel }}
             </span>
           </div>
@@ -111,9 +120,10 @@
             min="6"
             max="18"
             v-model.number="zoomLevel"
-            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600" />
+            class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600 dark:bg-gray-700" />
 
-          <div class="flex justify-between mt-2 text-[10px] text-gray-400">
+          <div
+            class="flex justify-between mt-2 text-[10px] text-gray-400 dark:text-gray-500">
             <span>国家级 (6)</span>
             <span>省市级 (10)</span>
             <span>街道级 (18)</span>
@@ -121,7 +131,7 @@
 
           <div
             v-if="tileCount > 1000"
-            class="mt-3 text-xs bg-amber-50 text-amber-700 p-2 rounded border border-amber-100 flex items-start gap-1">
+            class="mt-3 text-xs bg-amber-50 text-amber-700 p-2 rounded border border-amber-100 flex items-start gap-1 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800">
             ⚠️
             <span>
               瓦片量
@@ -132,7 +142,10 @@
 
           <div class="mt-4">
             <div class="mb-2 flex justify-between items-center">
-              <label class="text-xs font-medium text-gray-600">底图</label>
+              <label
+                class="text-xs font-medium text-gray-600 dark:text-gray-400">
+                底图
+              </label>
             </div>
             <div class="grid grid-cols-3 gap-2">
               <button
@@ -141,8 +154,8 @@
                 class="flex-1 py-1.5 px-1 text-xs rounded-lg border transition-colors cursor-pointer truncate"
                 :class="
                   option.id === currentBaseMap
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                    ? 'bg-blue-600 text-white border-blue-600 dark:bg-blue-600 dark:border-blue-600'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'
                 "
                 @click="setBaseMap(option.id)">
                 {{ option.name }}
@@ -154,7 +167,7 @@
 
       <div class="p-5 mt-auto">
         <button
-          class="w-full py-3 px-4 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-200 disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed transition-all transform active:scale-[0.98]"
+          class="w-full py-3 px-4 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-200 disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none disabled:cursor-not-allowed transition-all transform active:scale-[0.98] dark:shadow-blue-900/30 dark:disabled:bg-gray-700 dark:disabled:text-gray-500"
           :disabled="!currentMode || isDownloading"
           @click="startDownload">
           {{ isDownloading ? `处理中 ${downloadProgress}%` : "开始下载" }}
@@ -162,7 +175,7 @@
 
         <div
           v-if="isDownloading"
-          class="mt-3 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+          class="mt-3 h-2 w-full bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
           <div
             class="h-full bg-green-500 transition-all duration-300 ease-out"
             :style="{ width: downloadProgress + '%' }"></div>
@@ -259,6 +272,23 @@
   const downloadProgress = ref(0);
   const statusText = ref("请搜索城市或绘制矩形...");
   const currentBaseMap = ref<BaseMapId>("gaode_vector");
+  const isDark = ref(false);
+
+  const updateThemeState = (dark: boolean) => {
+    isDark.value = dark;
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  const toggleDark = () => {
+    const newState = !isDark.value;
+    updateThemeState(newState);
+    localStorage.setItem("theme", newState ? "dark" : "light");
+  };
+
   const baseMapOptions: BaseMapOption[] = [
     {
       id: "gaode_vector",
@@ -362,6 +392,22 @@
   };
 
   onMounted(() => {
+    const theme = localStorage.getItem("theme");
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    if (theme === "dark") {
+      updateThemeState(true);
+    } else if (theme === "light") {
+      updateThemeState(false);
+    } else {
+      updateThemeState(mediaQuery.matches);
+    }
+
+    mediaQuery.addEventListener("change", (e) => {
+      updateThemeState(e.matches);
+      localStorage.removeItem("theme");
+    });
+
     if (!mapContainer.value) return;
 
     // 1. 创建 Map
@@ -782,6 +828,72 @@
 </script>
 
 <style scoped>
+  .switch {
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    width: 3.5em;
+    height: 2em;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e5e7eb;
+    transition: 0.4s;
+    border-radius: 30px;
+    overflow: hidden;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 1.4em;
+    width: 1.4em;
+    border-radius: 20px;
+    left: 0.3em;
+    bottom: 0.3em;
+    transition: 0.4s;
+    transition-timing-function: cubic-bezier(0.81, -0.04, 0.38, 1.5);
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .switch input:checked + .slider {
+    background-color: #3d3d3d;
+  }
+
+  .switch input:checked + .slider:before {
+    transform: translateX(1.5em);
+    background-color: transparent;
+    box-shadow: inset 8px -4px 0px 0px #fff;
+  }
+
+  .slider::after {
+    content: "☀️";
+    position: absolute;
+    right: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8em;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+
+  .switch input:checked + .slider::after {
+    opacity: 0;
+  }
+
   :deep(.leaflet-bottom) {
     display: none;
   }
