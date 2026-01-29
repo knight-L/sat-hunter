@@ -6,8 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="no-referrer" />
     <title>SAT-HUNTER</title>
-    <script type="module" crossorigin src="./assets/index-CiMxgt9G.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-D8Cn7xfe.css">
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme');
+        const isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CsVuLLKT.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DuQFFgLC.css">
   </head>
   <body>
     <div id="app"></div>
